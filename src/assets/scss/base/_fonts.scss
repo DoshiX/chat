@@ -1,0 +1,15 @@
+@font-face {
+    $font-name: "#{$font-family-custom}-Regular";
+    font-family: $font-family-custom;
+    font-weight: $font-weight-regular;
+    font-style: normal;
+    src: local("Inter"), url("#{$font-path}/#{$font-name}.ttf") format("truetype");
+}
+
+@font-face {
+    $font-name: "#{$font-family-custom}-SemiBold";
+    font-family: $font-family-custom;
+    font-weight: $font-weight-semi-bold;
+    font-style: normal;
+    src: local("Inter"), url("#{$font-path}/#{$font-name}.ttf") format("truetype");
+}
