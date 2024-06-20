@@ -1,3 +1,6 @@
+// Plagins
+@import "normalize-scss/sass/normalize/import-now";
+
 // Abstracts
 @import "abstracts/variables.scss";
 @import "abstracts/mixins.scss";
@@ -7,6 +10,3 @@
 @import "base/fonts.scss";
 
 // Components
-
-// Plagins
-@import "normalize-scss/sass/normalize/import-now";
