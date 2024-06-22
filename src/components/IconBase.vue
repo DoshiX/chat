@@ -14,12 +14,14 @@
         </title>
         
         <g :fill="iconColor">
-            <slot />
+            <component :is="ICONS[iconName]"></component>
         </g>
     </svg>
   </template>
   
 <script setup>
+import ICONS from '@/components/icons';
+
 defineProps ({
 	iconName: {
 		type: String,
@@ -44,7 +46,5 @@ defineProps ({
 svg {
     display: inline-block;
     vertical-align: baseline;
-
-    margin-bottom: -2px;
 }
 </style>
