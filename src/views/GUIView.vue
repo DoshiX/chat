@@ -9,20 +9,58 @@
                 <div class="gui-page__component-item">
                     <h3 class="gui-page__component-title">Иконки</h3>
                     <div class="gui-page__component-icons">
-                        <icon-base icon-name="call"><icon-call /></icon-base>
-                        <icon-base icon-name="emoji"><icon-emoji /></icon-base>
-                        <icon-base icon-name="check"><icon-check /></icon-base>
-                        <icon-base icon-name="menu"><icon-menu /></icon-base>
-                        <icon-base icon-name="more"><icon-more /></icon-base>
-                        <icon-base icon-name="search"><icon-search /></icon-base>
-                        <icon-base icon-name="send"><icon-send /></icon-base>
-                        <icon-base icon-name="verified"><icon-verified /></icon-base>
+                        <icon-base icon-name="call" />
+                        <icon-base icon-name="emoji" />
+                        <icon-base icon-name="check" />
+                        <icon-base icon-name="menu" />
+                        <icon-base icon-name="more" />
+                        <icon-base icon-name="search" />
+                        <icon-base icon-name="send" />
+                        <icon-base icon-name="verified" />
                     </div>
                 </div>
 
                 <div class="gui-page__component-item">
-                    <h3 class="gui-page__component-title">Компонент 2</h3>
-                        <div>Компонент</div>
+                    <h3 class="gui-page__component-title">Кнопки</h3>
+                    <div class="gui-page__component-button">
+                        <ButtonComponent
+                            text="Кнопка с иконкой слева"
+                            prefixIcon
+                            iconName="call"
+                            widthIcon="15"
+                            heightIcon="15"
+                        />
+                        <ButtonComponent
+                            text="Кнопка с иконкой справа"
+                            suffixIcon
+                            iconName="call"
+                            widthIcon="15"
+                            heightIcon="15"
+                        />
+                        <ButtonComponent
+                            text="Кнопка с темой blue по умолчанию"
+                            prefixIcon
+                            iconName="call"
+                            widthIcon="15"
+                            heightIcon="15"
+                        />
+                        <ButtonComponent
+                            text="Кнопка с темой grey"
+                            suffixIcon
+                            iconName="call"
+                            widthIcon="15"
+                            heightIcon="15"
+                            theme="grey"
+                        />
+                        <ButtonComponent
+                            text="Отключенная кнопка"
+                            prefixIcon
+                            iconName="call"
+                            widthIcon="15"
+                            heightIcon="15"
+                            disabled
+                        />
+                    </div>
                 </div>
             </div>
         </main>
@@ -31,14 +69,7 @@
 
 <script setup>
 import IconBase from '@/components/IconBase.vue';
-import IconCall from '@/components/icons/IconCall.vue';
-import IconEmoji from '@/components/icons/IconEmoji.vue';
-import IconCheck from '@/components/icons/IconCheck.vue';
-import IconMenu from '@/components/icons/IconMenu.vue';
-import IconMore from '@/components/icons/IconMore.vue';
-import IconSearch from '@/components/icons/IconSearch.vue';
-import IconSend from '@/components/icons/IconSend.vue';
-import IconVerified from '@/components/icons/IconVerified.vue';
+import ButtonComponent from '@/components/ButtonComponent.vue';
 </script>
 
 <style scoped lang="scss">
@@ -112,6 +143,12 @@ import IconVerified from '@/components/icons/IconVerified.vue';
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+        }
+
+        &-button {            
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
         }
     }
 }
