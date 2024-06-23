@@ -111,6 +111,17 @@
                         />
                     </div>
                 </div>
+
+                <div class="gui-page__component-item">
+                    <h3 class="gui-page__component-title">Аватар</h3>
+                    <div class="gui-page__component-avatar">
+                        <AvatarComponent photoName="avatar-5.jpg" size="small" />
+                        <AvatarComponent photoName="avatar-5.jpg" />
+
+                        <AvatarComponent size="small" stubText="Текст"/>
+                        <AvatarComponent stubText="Текст"/>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -120,6 +131,7 @@
 import IconBase from '@/components/IconBase.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import InputComponent from '@/components/InputComponent.vue';
+import AvatarComponent from '@/components/AvatarComponent.vue';
 
 import { ref } from 'vue';
 
@@ -214,6 +226,12 @@ const msg = ref('Hello World!');
 
             background-color: #8f8fff26;
             border-radius: 12px;
+        }
+
+        &-avatar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
     }
 }
