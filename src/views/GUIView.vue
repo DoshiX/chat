@@ -62,6 +62,55 @@
                         />
                     </div>
                 </div>
+
+                <div class="gui-page__component-item">
+                    <h3 class="gui-page__component-title">Поля ввода</h3>
+                    <div class="gui-page__component-input">
+                        <InputComponent
+                            v-model="msg"
+                        />
+
+                        <InputComponent 
+                            placeholder="Поиск"
+                            circle
+                            size="small"
+                            theme="grey"
+                            prefixElement
+                        >
+                            <template #prefixElement>
+                                <icon-base
+                                    icon-name="search"
+                                    icon-color="#707991"
+                                />
+                            </template>
+                        </InputComponent>
+
+                        <InputComponent 
+                            placeholder="Напишите сообщение"
+                            prefixElement
+                            suffixElement
+                        >
+                            <template #prefixElement>
+                                <icon-base
+                                    icon-name="emoji"
+                                    icon-color="#707991"
+                                />
+                            </template>
+
+                            <template #suffixElement>
+                                <icon-base
+                                    icon-name="send"
+                                    icon-color="#8BABD8"
+                                />
+                            </template>
+                        </InputComponent>
+
+                        <InputComponent 
+                            placeholder="Отключенный ввод"
+                            disabled
+                        />
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -70,6 +119,11 @@
 <script setup>
 import IconBase from '@/components/IconBase.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
+import InputComponent from '@/components/InputComponent.vue';
+
+import { ref } from 'vue';
+
+const msg = ref('Hello World!');
 </script>
 
 <style scoped lang="scss">
@@ -149,6 +203,17 @@ import ButtonComponent from '@/components/ButtonComponent.vue';
             display: flex;
             flex-direction: column;
             flex-wrap: wrap;
+        }
+
+        &-input {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            padding: 20px;
+
+            background-color: #8f8fff26;
+            border-radius: 12px;
         }
     }
 }

@@ -3,4 +3,8 @@ const BUTTON_THEMES = {
 	'grey': 'button--grey',
 };
 
-export default BUTTON_THEMES;
+const INPUT_THEMES = {
+	'grey': 'input--grey',
+};
+
+export { BUTTON_THEMES, INPUT_THEMES };
