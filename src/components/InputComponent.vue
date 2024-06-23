@@ -137,7 +137,6 @@ const inputModifiersClass = {
 
     &::placeholder {
         color: $input-text-placeholder-color;
-        overflow: hidden;
     }
 
     &:disabled {

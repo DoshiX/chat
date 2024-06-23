@@ -3,4 +3,9 @@ const INPUT_SIZES = {
 	'medium': 'input--medium',
 };
 
-export { INPUT_SIZES };
+const AVATAR_SIZES = {
+	'small': 'avatar--small',
+	'medium': 'avatar--medium',
+};
+
+export { INPUT_SIZES, AVATAR_SIZES };
