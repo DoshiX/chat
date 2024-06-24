@@ -48,6 +48,8 @@ const imgHandler = function (event) {
 
 <style scoped lang="scss">
 .avatar {
+    cursor: default;
+    
     &--small {
         width: $avatar-small;
         height: $avatar-small;

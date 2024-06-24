@@ -81,7 +81,7 @@ defineProps({
 
     background-color: transparent;
 
-    transition: color 300ms ease-in-out;
+    transition: color 250ms ease-in-out;
 
     &--blue {
         color: $button-blue-color;
