@@ -122,6 +122,15 @@
                         <AvatarComponent stubText="Текст"/>
                     </div>
                 </div>
+
+                <div class="gui-page__component-item">
+                    <h3 class="gui-page__component-title">Чат</h3>
+                    <div class="gui-page__component-chat" v-for="chat in chatsData" :key="chat.id">
+                        <ChatItemComponent
+                            :chat="formatChat(chat)"
+                        />
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -132,10 +141,98 @@ import IconBase from '@/components/IconBase.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import InputComponent from '@/components/InputComponent.vue';
 import AvatarComponent from '@/components/AvatarComponent.vue';
+import ChatItemComponent from '@/components/ChatItemComponent.vue';
 
 import { ref } from 'vue';
 
 const msg = ref('Hello World!');
+
+const formatChat = (chat) => {
+	const lastMessage = chat.messages.at(-1);
+
+	const unReadMessagesCount = chat.messages.filter((message)=> !message.read).length;
+    
+	const formatedChat = {
+		id: chat.id,
+		...(chat.avatar_url) && { avatar_url: chat.avatar_url },
+		...(chat.name) && { name: chat.name },
+		verified: chat.verified,
+		unreadMessagesCount: unReadMessagesCount,
+	};
+
+	if (lastMessage) { formatedChat.lastMessage = lastMessage; }
+
+	return formatedChat;
+};
+
+const chatsData = ref([
+	{
+		id: 1,
+		avatar_url: '',
+		name: 'New chat',
+		verified: false,
+		messages: [],
+	},
+	{
+		id: 2,
+		avatar_url: 'avatar-7.jpg',
+		name: 'New chat',
+		verified: false,
+		messages: [
+			{
+				id: 1,
+				text: 'message',
+				date: '14:00',
+				read: true,
+			},
+		],
+	},
+	{
+		id: 3,
+		avatar_url: 'avatar-1.jpg',
+		name: 'Чат 2',
+		verified: false,
+		messages: [
+			{
+				id: 1,
+				text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+				date: '18:28',
+			},
+			{
+				id: 2,
+				text: 'Ок, увидимся',
+				date: '18:30',
+			},
+		],
+	},
+	{
+		id: 4,
+		avatar_url: 'avatar-5.jpg',
+		name: 'New chat',
+		verified: false,
+		messages: [
+			{
+				id: 1,
+				text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+				date: '20:30',
+			},
+		],
+	},
+	{
+		id: 5,
+		avatar_url: '',
+		name: 'Satoru Gojo',
+		verified: true,
+		messages: [
+			{
+				id: 1,
+				text: 'Прибыл',
+				date: '20:31',
+				read: true,
+			},
+		],
+	},
+]);
 </script>
 
 <style scoped lang="scss">
@@ -232,6 +329,17 @@ const msg = ref('Hello World!');
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+        }
+
+        &-chat {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            padding: 20px;
+
+            background-color: #8f8fff26;
+            border-radius: 12px;
         }
     }
 }

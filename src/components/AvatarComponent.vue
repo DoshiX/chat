@@ -86,6 +86,7 @@ const imgHandler = function (event) {
 
         &-text {
             overflow: hidden;
+            white-space: nowrap;
 
             padding: 1px;
 
