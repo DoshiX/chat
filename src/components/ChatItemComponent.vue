@@ -1,6 +1,6 @@
 <template>
     <div class="chat-wrapper">
-        <div class="chat" :id="chat.id">
+        <div class="chat" :id="chat.id" :class="[{ 'chat--active': chat.isActive}]">
             <AvatarComponent
                 class="chat__avatar"
                 :stubText="firstLetterChatName"
@@ -16,7 +16,7 @@
             
             <span class="chat__date" v-if="chat.lastMessage">{{ chat.lastMessage.date }}</span>
             
-            <span class="chat__message-count" v-if="chat.lastMessage && chat.unreadMessagesCount != 0">{{ chat.unreadMessagesCount }}</span>
+            <span class="chat__message-count" v-if="chat.lastMessage && chat.unreadMessagesCount !== 0">{{ chat.unreadMessagesCount }}</span>
         </div>
     </div>
 </template>
@@ -48,7 +48,7 @@ const firstLetterChatName = computed(() => {
     grid-template-areas:
         "avatar chatName date"
         "avatar message messageCount";
-    justify-content: space-between;
+    align-content: space-around;
     align-items: center;
     column-gap: 16px;
 
@@ -56,12 +56,24 @@ const firstLetterChatName = computed(() => {
     width: 100%;
     padding: 12px 16px;
 
+    cursor: pointer;
+
     background-color: $chat-background-color;
 
-    transition: background-color 300ms ease-in-out;
+    transition: background-color 250ms ease-in-out;
+
+    &:hover {
+        background-color: $chat-background-color-hover;
+    }
+
+    &--active {
+        background-color: $chat-background-color-active;
+    }
 
     &__avatar {
         grid-area: avatar;
+
+        cursor: pointer;
     }
 
     &__name {
@@ -123,10 +135,6 @@ const firstLetterChatName = computed(() => {
         justify-self: end;
 
         color: $chat-date-text-color;
-    }
-
-    &:hover {
-        background-color: $chat-background-color-hover;
     }
 }
 </style>

@@ -131,6 +131,15 @@
                         />
                     </div>
                 </div>
+
+                <div class="gui-page__component-item">
+                    <h3 class="gui-page__component-title">Список чатов</h3>
+                    <div class="gui-page__component-chat-list">
+                        <ChatListComponent 
+                            :chats="chatsData"
+                        />
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -142,6 +151,7 @@ import ButtonComponent from '@/components/ButtonComponent.vue';
 import InputComponent from '@/components/InputComponent.vue';
 import AvatarComponent from '@/components/AvatarComponent.vue';
 import ChatItemComponent from '@/components/ChatItemComponent.vue';
+import ChatListComponent from '@/components/ChatListComponent.vue';
 
 import { ref } from 'vue';
 
@@ -296,6 +306,10 @@ const chatsData = ref([
             padding-bottom: 10px;
 
             border-bottom: 1px dashed #eaecef;
+
+            &:last-child {
+                margin-bottom: 70px;
+            }
         }
 
         &-title {
@@ -340,6 +354,10 @@ const chatsData = ref([
 
             background-color: #8f8fff26;
             border-radius: 12px;
+
+            &-list {
+                border: 1px solid  #8f8fff26;
+            }
         }
     }
 }
