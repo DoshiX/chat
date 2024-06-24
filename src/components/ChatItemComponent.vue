@@ -3,13 +3,20 @@
         <div class="chat" :id="chat.id" :class="[{ 'chat--active': chat.isActive}]">
             <AvatarComponent
                 class="chat__avatar"
-                :stubText="firstLetterChatName"
+                :stubText="GetFirstLetterString(chat.name)"
                 :photoName="chat.avatar_url"
             />
 
             <div class="chat__name">
                 <div class="chat__name-text">{{ chat.name }}</div>
-                <icon-base v-if="chat.verified" icon-name="verified" icon-color="#1a9cff"/>
+                <icon-base
+                    v-if="chat.verified"
+                    class="chat__name-icon"
+                    icon-name="verified"
+                    icon-color="#1a9cff"
+                    width="18" 
+                    height="18"
+                />
             </div>
 
             <span class="chat__message" v-if="chat.lastMessage">{{ chat.lastMessage.text }}</span>
@@ -22,10 +29,9 @@
 </template>
 
 <script setup>
+import { GetFirstLetterString } from '@/helpers';
 import AvatarComponent from '@/components/AvatarComponent.vue';
 import IconBase from '@/components/IconBase.vue';
-
-import { computed } from 'vue';
 
 const props = defineProps ({
 	chat: {
@@ -33,11 +39,6 @@ const props = defineProps ({
 		required: true,
 	},
 });
-
-const firstLetterChatName = computed(() => {
-	return props.chat.name.split('')[0].toUpperCase();
-});
-
 </script>
 
 <style scoped lang="scss">
@@ -90,6 +91,10 @@ const firstLetterChatName = computed(() => {
 
             -webkit-line-clamp: 1;
             text-overflow: ellipsis;
+        }
+
+        &-icon {
+            flex-shrink: 0;
         }
     }
 

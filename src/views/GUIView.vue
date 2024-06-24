@@ -140,6 +140,18 @@
                         />
                     </div>
                 </div>
+
+                <div class="gui-page__component-item">
+                    <h3 class="gui-page__component-title">Top bar</h3>
+                    <div class="gui-page__component-top-bar">
+                        <TopBarComponent
+                            :user="chatsData[5]"
+                            @searchClick="searchClickHandler"
+                            @callClick="callClickHandler"
+                            @optionsClick="optionsClickHandler"
+                        />
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -152,6 +164,7 @@ import InputComponent from '@/components/InputComponent.vue';
 import AvatarComponent from '@/components/AvatarComponent.vue';
 import ChatItemComponent from '@/components/ChatItemComponent.vue';
 import ChatListComponent from '@/components/ChatListComponent.vue';
+import TopBarComponent from '@/components/TopBarComponent.vue';
 
 import { ref } from 'vue';
 
@@ -242,13 +255,30 @@ const chatsData = ref([
 			},
 		],
 	},
+	{
+		id: 6,
+		avatar_url: 'avatar-2.png',
+		name: 'David Moore',
+		verified: true,
+		online_status: 'в сети 5 мин назад',
+		messages: [],
+	},
 ]);
+
+const searchClickHandler = () => {
+	console.log('Клик по поиску');
+};
+const callClickHandler = () => {
+	console.log('Клик по трубке');
+};
+const optionsClickHandler = () => {
+	console.log('Клик по опциям');
+};
+
 </script>
 
 <style scoped lang="scss">
 .gui-page {
-    line-height: 30px;
-
     display: flex;
     flex-direction: column;
 
@@ -358,6 +388,13 @@ const chatsData = ref([
             &-list {
                 border: 1px solid  #8f8fff26;
             }
+        }
+
+        &-top-bar {
+            padding: 20px;
+
+            background-color: #8f8fff26;
+            border-radius: 12px;
         }
     }
 }
