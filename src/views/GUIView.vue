@@ -165,6 +165,15 @@
                         />
                     </div>
                 </div>
+
+                <div class="gui-page__component-item">
+                    <h3 class="gui-page__component-title">Messages List</h3>
+                    <div class="gui-page__component-message-list">
+                        <MessagesListComponent
+                            :messages="chatsData[5].messages"
+                        />
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -179,6 +188,7 @@ import ChatItemComponent from '@/components/ChatItemComponent.vue';
 import ChatListComponent from '@/components/ChatListComponent.vue';
 import TopBarComponent from '@/components/TopBarComponent.vue';
 import MessageComponent from '@/components/MessageComponent.vue';
+import MessagesListComponent from '@/components/MessagesListComponent.vue';
 
 import { ref } from 'vue';
 
@@ -279,7 +289,17 @@ const chatsData = ref([
 			{
 				id: 1,
 				text: 'Тестовое сообщение😐',
-				date: '18:12',
+				date: '2024-06-24T11:30:38.538Z',
+			},
+			{
+				id: 2,
+				text: 'Привет, все работает',
+				date: '2024-06-24T11:31:38.538Z',
+			},
+			{
+				id: 3,
+				text: 'Ну все, можно расходиться 😄',
+				date: '2024-06-24T11:32:38.538Z',
 			},
 		],
 	},
@@ -425,6 +445,13 @@ const optionsClickHandler = () => {
 
             background-color: #8f8fff26;
             border-radius: 12px;
+            
+            &-list {
+                padding: 20px;
+
+                background-color: #8f8fff26;
+                border-radius: 12px;
+            }
         }
     }
 }
