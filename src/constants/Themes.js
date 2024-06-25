@@ -7,4 +7,9 @@ const INPUT_THEMES = {
 	'grey': 'input--grey',
 };
 
-export { BUTTON_THEMES, INPUT_THEMES };
+const MESSAGE_THEMES = {
+	'white': 'message--white',
+	'green': ['message--green'],
+};
+
+export { BUTTON_THEMES, INPUT_THEMES, MESSAGE_THEMES };
