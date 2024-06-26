@@ -15,4 +15,16 @@ export default defineConfig({
 			'@': fileURLToPath(new URL('./src', import.meta.url)),
 		},
 	},
+	css: {
+		preprocessorOptions: {
+			scss: {
+				additionalData: `
+				  @import "@/assets/scss/abstracts/_variables.scss";
+				  @import "@/assets/scss/abstracts/_mixins.scss";
+				  @import "@/assets/scss/components/_all.scss";
+				  @import "@/assets/scss/pages/_all.scss";
+				`,
+			},
+		},
+	},
 });
