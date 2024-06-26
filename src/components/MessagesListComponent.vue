@@ -1,6 +1,6 @@
 <template>
     <div class="messages__wrapper">
-        <div class="messages">
+        <div class="messages" v-if="messages.length !== 0">
             <div v-for="(messagesByDate, index) in formatMessagesByDate" :key="index"
                 class="messages__day-group"
             >
@@ -13,6 +13,8 @@
                 />
             </div>
         </div>
+
+        <div v-else class="messages__stub">Список сообщений пуст</div>
     </div>
 </template>
 
@@ -60,14 +62,14 @@ const formatMessagesByDate = computed(() => {
 
 <style scoped lang="scss">
 .messages {
-    padding: 24px;
+    padding: 0 24px;
 
     background-color: $messages-list-background-color;
 
     &__day-group {
         display: flex;
         flex-direction: column;
-        gap: 24px;
+        gap: 18px;
     }
 
     &__date-sent {
@@ -89,6 +91,15 @@ const formatMessagesByDate = computed(() => {
         &--rignt {
             align-self: flex-end;
         }
+    }
+
+    &__stub {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+
+        color: $messages-list-stub-color;
     }
 }
 </style>

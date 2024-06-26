@@ -128,7 +128,11 @@ const props = defineProps ({
 
     &__control-buttons {
         display: flex;
-        gap: 12px;
+        gap: 24px;
+
+        &:last-child {
+            margin-right: 8px;
+        }
     }
 }
 </style>

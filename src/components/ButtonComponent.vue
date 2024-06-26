@@ -4,6 +4,7 @@
             :class="[BUTTON_THEMES[theme], 'button']"
             :type="type"
             :disabled="disabled"
+            @click="$emit('buttonClick')"
         >
             <icon-base
                 v-if="iconName && prefixIcon"
@@ -70,6 +71,8 @@ defineProps({
     justify-content: space-between;
     align-items: center;
     gap: 5px;
+
+    padding: 0;
 
     cursor: pointer;
 
