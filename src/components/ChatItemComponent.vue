@@ -1,29 +1,41 @@
 <template>
     <div class="chat-wrapper">
-        <div class="chat" :id="chat.id" :class="[{ 'chat--active': chat.isActive}]">
+        <div class="chat"
+            :id="chat.id"
+            :class="[{
+                        'chat--active': chat.isActive,
+                        'chat--small': !isFullSize
+                    }]"
+        >
             <AvatarComponent
                 class="chat__avatar"
                 :stubText="GetFirstLetterString(chat.name)"
                 :photoName="chat.avatar_url"
             />
+                
+            <div class="chat__info" v-if="isFullSize">
+                <div class="chat__title">
+                    <div class="chat__name">
+                        <div class="chat__name-text">{{ chat.name }}</div>
+                        <icon-base
+                            v-if="chat.verified"
+                            class="chat__name-icon"
+                            icon-name="verified"
+                            icon-color="#1a9cff"
+                            width="18" 
+                            height="18"
+                        />
+                    </div>
 
-            <div class="chat__name">
-                <div class="chat__name-text">{{ chat.name }}</div>
-                <icon-base
-                    v-if="chat.verified"
-                    class="chat__name-icon"
-                    icon-name="verified"
-                    icon-color="#1a9cff"
-                    width="18" 
-                    height="18"
-                />
+                    <span class="chat__date" v-if="chat.lastMessage">{{ chat.lastMessage.date }}</span>
+                </div>
+
+                <div class="chat__message" v-if="chat.lastMessage">
+                    <span class="chat__message-text">{{ chat.lastMessage.text }}</span>
+                
+                    <span class="chat__message-count" v-if="chat.unreadMessagesCount !== 0">{{ chat.unreadMessagesCount }}</span>
+                </div>
             </div>
-
-            <span class="chat__message" v-if="chat.lastMessage">{{ chat.lastMessage.text }}</span>
-            
-            <span class="chat__date" v-if="chat.lastMessage">{{ chat.lastMessage.date }}</span>
-            
-            <span class="chat__message-count" v-if="chat.lastMessage && chat.unreadMessagesCount !== 0">{{ chat.unreadMessagesCount }}</span>
         </div>
     </div>
 </template>
@@ -38,20 +50,18 @@ const props = defineProps ({
 		type: Object,
 		required: true,
 	},
+	isFullSize: {
+		type: Boolean,
+		default: true,
+	},
 });
 </script>
 
 <style scoped lang="scss">
 .chat {
-    display: grid;
-    grid-template-columns: 48px 1fr auto;
-    grid-template-rows: 24px 18px;
-    grid-template-areas:
-        "avatar chatName date"
-        "avatar message messageCount";
-    align-content: space-around;
+    display: flex;
     align-items: center;
-    column-gap: 16px;
+    gap: 16px;
 
     height: $chat-height;
     width: 100%;
@@ -71,9 +81,28 @@ const props = defineProps ({
         background-color: $chat-background-color-active;
     }
 
-    &__avatar {
-        grid-area: avatar;
+    &--small {
+        width: fit-content;
+    }
 
+    &__info {
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+        gap: 4px;
+
+        flex-grow: 1;
+    }
+
+    &__title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding-top: 3px;
+    }
+
+    &__avatar {
         cursor: pointer;
     }
 
@@ -83,8 +112,6 @@ const props = defineProps ({
         display: flex;
         align-items: center;
         gap: 4px;
-
-        grid-area: chatName;
 
         &-text {
             @include line-clamp-text-formated;
@@ -99,17 +126,20 @@ const props = defineProps ({
     }
 
     &__message {
-        @include line-clamp-text-formated;
+        display: flex;
+        justify-content: space-between;
 
-        font-size: $chat-message-font-size;
-        line-height: $chat-message-line-height;
+        &-text {
+            @include line-clamp-text-formated;
 
-        grid-area: message;
+            font-size: $chat-message-font-size;
+            line-height: $chat-message-line-height;
 
-        -webkit-line-clamp: 1;
-        text-overflow: ellipsis;
+            -webkit-line-clamp: 1;
+            text-overflow: ellipsis;
 
-        color: $chat-message-text-color;
+            color: $chat-message-text-color;
+        }
 
         &-count {
             font-size: $chat-message-count-font-size;
@@ -118,9 +148,7 @@ const props = defineProps ({
             display: flex;
             align-items: center;
             justify-content: center;
-
-            grid-area: messageCount;
-            justify-self: end;
+            flex-shrink: 0;
 
             width: $chat-message-count-size;
             height: $chat-message-count-size;
@@ -136,10 +164,11 @@ const props = defineProps ({
         font-size: $chat-date-font-size;
         line-height: $chat-date-line-height;
 
-        grid-area: date;
-        justify-self: end;
-
         color: $chat-date-text-color;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 </style>
