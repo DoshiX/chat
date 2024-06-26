@@ -1,15 +1,16 @@
 <template>
     <div class="sidebar__wrapper">
-        <div :class="[{'sidebar--small' : !sidebarIsFullSize }, 'sidebar']">
+        <div :class="[{'sidebar--small' : !isFullSize }, 'sidebar']">
             <div class="sidebar__control-panel">
                 <ButtonComponent
+                    class="sidebar__button"
                     prefixIcon
                     iconName="menu"
                     theme="grey"
-                    @click="sidebarClickHandler"
+                    @click="$emit('sideBarClick')"
                 />
 
-                <div class="sidebar__search" v-if="sidebarIsFullSize">
+                <div class="sidebar__search" v-if="isFullSize">
                     <InputComponent 
                         placeholder="Поиск"
                         circle
@@ -32,15 +33,15 @@
             <div class="sidebar__list" v-if="chats.length !== 0">
                 <ChatListComponent 
                     :chats="chats"
-                    :isFullSize="sidebarIsFullSize"
+                    :isFullSize="isFullSize"
                 />
             </div>
 
-            <div class="sidebar__list-stub" v-if="sidebarIsFullSize && chats.length === 0">
+            <div class="sidebar__list-stub" v-if="isFullSize && chats.length === 0">
                 Список пуст
             </div>
 
-            <div class="sidebar__list-stub--small" v-if="!sidebarIsFullSize"></div>
+            <div class="sidebar__list-stub--small" v-if="!isFullSize"></div>
         </div>
     </div>
 </template>
@@ -51,22 +52,20 @@ import ButtonComponent from '@/components/ButtonComponent.vue';
 import InputComponent from '@/components/InputComponent.vue';
 import ChatListComponent from '@/components/ChatListComponent.vue';
 
-import { ref } from 'vue';
-
 const model = defineModel();
 
-const props = defineProps ({
+const props = defineProps({
 	chats: {
 		type: Array,
 		required: true,
 	},
+	isFullSize: {
+		type: Boolean,
+		default: true,
+	},
 });
 
-let sidebarIsFullSize = ref(true);
-
-const sidebarClickHandler = () => {
-	sidebarIsFullSize.value = !sidebarIsFullSize.value;
-};
+defineEmits(['sideBarClick']);
 </script>
 
 <style scoped lang="scss">
@@ -75,8 +74,8 @@ const sidebarClickHandler = () => {
 
     display: flex;
     flex-direction: column;
+    gap: 8px;
 
-    width: 100%;
     height: 100%;
 
     background-color: $sidebar-background-color;
@@ -86,21 +85,43 @@ const sidebarClickHandler = () => {
     }
 
     &__wrapper {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
         height: 100%;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
     &__control-panel {
-        position: absolute;
+        position: sticky;
         top: 0;
         right: 0;
         left: 0;
 
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: 16px;
 
         height: $sidebar-height;
         padding: 8px 16px;
+
+        background: white;
+    }
+
+    &__button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+
+        width: $sidebar-width;
+        height: $sidebar-height;
+        margin: 0 7px;
     }
 
     &__search {
@@ -108,17 +129,6 @@ const sidebarClickHandler = () => {
     }
 
     &__list {
-        overflow: auto;
-
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-
-        margin-top: $sidebar-list-margin-top;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-        
         &-stub {
             align-self: center;
 
