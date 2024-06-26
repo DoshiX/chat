@@ -3,6 +3,7 @@
         <div class="chat-list" v-for="chat in chatsData" :key="chat.id">
             <ChatItemComponent
                 :chat="chat"
+				:isFullSize="isFullSize"
                 @click="selectedChatElement(chat)"
             />
         </div>
@@ -18,6 +19,10 @@ const props = defineProps({
 	chats: {
 		type: Array,
 		required: true,
+	},
+	isFullSize: {
+		type: Boolean,
+		default: true,
 	},
 });
 

@@ -174,6 +174,16 @@
                         />
                     </div>
                 </div>
+
+                <div class="gui-page__component-item">
+                    <h3 class="gui-page__component-title">Sidebar</h3>
+                    <div class="gui-page__component-sidebar">
+                        <ChatSidebarComponent
+                            v-model="searchSidebar"
+                            :chats="chatsData"
+                        />
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -189,10 +199,12 @@ import ChatListComponent from '@/components/ChatListComponent.vue';
 import TopBarComponent from '@/components/TopBarComponent.vue';
 import MessageComponent from '@/components/MessageComponent.vue';
 import MessagesListComponent from '@/components/MessagesListComponent.vue';
+import ChatSidebarComponent from '@/components/ChatSidebarComponent.vue';
 
 import { ref } from 'vue';
 
 const msg = ref('Hello World!');
+const searchSidebar = ref('');
 
 const formatChat = (chat) => {
 	const lastMessage = chat.messages.at(-1);
@@ -327,6 +339,8 @@ const optionsClickHandler = () => {
     margin: 0 auto;
 
     &__header {
+        line-height: 30px;
+        
         position: fixed;
         top: 0;
         right: 0;
@@ -427,6 +441,7 @@ const optionsClickHandler = () => {
 
             &-list {
                 border: 1px solid  #8f8fff26;
+                background-color: #8f8fff26;
             }
         }
 
@@ -452,6 +467,14 @@ const optionsClickHandler = () => {
                 background-color: #8f8fff26;
                 border-radius: 12px;
             }
+        }
+
+        &-sidebar {
+            height: 300px;
+            padding: 20px;
+
+            background-color: #8f8fff26;
+            border-radius: 12px;
         }
     }
 }

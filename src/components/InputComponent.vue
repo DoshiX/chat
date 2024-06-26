@@ -87,6 +87,7 @@ const inputModifiersClass = {
         position: relative;
 
         display: flex;
+        width: 100%;
     }
 
     &__slot {
