@@ -4,6 +4,7 @@
             <ChatItemComponent
                 :chat="chat"
 				:isFullSize="isFullSize"
+                :animation="animation"
                 @click="$emit('chatSelect', chat.id)"
             />
         </div>
@@ -21,6 +22,10 @@ defineProps({
 	isFullSize: {
 		type: Boolean,
 		default: true,
+	},
+	animation: {
+		type: Boolean,
+		default: false,
 	},
 });
 

@@ -7,10 +7,11 @@
                     prefixIcon
                     iconName="menu"
                     theme="grey"
+                    :disabled="isDisabledOpenSideBar"
                     @click="$emit('sideBarClick')"
                 />
 
-                <div class="sidebar__search" v-if="isFullSize">
+                <div :class="[chatSideBarAnimationState, 'sidebar__search']">
                     <InputComponent 
                         placeholder="Поиск"
                         circle
@@ -34,6 +35,7 @@
                 <ChatListComponent 
                     :chats="chats"
                     :isFullSize="isFullSize"
+                    :animation="animation"
                     @chatSelect="$emit('chatSelect', $event)"
                 />
             </div>
@@ -42,7 +44,7 @@
                 Список пуст
             </div>
 
-            <div class="sidebar__list-stub--small" v-if="!isFullSize"></div>
+            <div class="sidebar__list-stub--small" v-if="!isFullSize && chats.length === 0"></div>
         </div>
     </div>
 </template>
@@ -53,17 +55,39 @@ import ButtonComponent from '@/components/ButtonComponent.vue';
 import InputComponent from '@/components/InputComponent.vue';
 import ChatListComponent from '@/components/ChatListComponent.vue';
 
+import { computed } from 'vue';
+
 const model = defineModel();
 
-defineProps({
+const props = defineProps({
 	chats: {
 		type: Array,
 		required: true,
 	},
 	isFullSize: {
-		type: Boolean,
+		type: [Boolean, null],
 		default: true,
 	},
+	animation: {
+		type: Boolean,
+		default: false,
+	},
+	isDisabledOpenSideBar: {
+		type: Boolean,
+		default: false,
+	},
+});
+
+const chatSideBarAnimationState = computed(()=> {
+	if (props.isFullSize === null) 
+		return 'sidebar__search--hidden';
+    
+	if (props.isFullSize) 
+		return 'sidebar__search--animation-open';
+	if (!props.isFullSize)
+		return 'sidebar__search--animation-close';
+
+	return null;
 });
 
 defineEmits(['sideBarClick', 'chatSelect']);
@@ -76,8 +100,6 @@ defineEmits(['sideBarClick', 'chatSelect']);
     display: flex;
     flex-direction: column;
     gap: 8px;
-
-    height: 100%;
 
     background-color: $sidebar-background-color;
 
@@ -93,6 +115,8 @@ defineEmits(['sideBarClick', 'chatSelect']);
 
         height: 100%;
 
+        background-color: $sidebar-background-color;
+
         &::-webkit-scrollbar {
             display: none;
         }
@@ -103,6 +127,7 @@ defineEmits(['sideBarClick', 'chatSelect']);
         top: 0;
         right: 0;
         left: 0;
+        z-index: $sidebar-control-panel-z-index;
 
         display: flex;
         align-items: center;
@@ -127,12 +152,26 @@ defineEmits(['sideBarClick', 'chatSelect']);
 
     &__search {
         width: 100%;
+
+        &--animation {
+            &-open {
+                animation: open_sidebar-search .5s ease both;
+            }
+            &-close {
+                animation: close_sidebar-search .5s ease both;
+            }
+        }
+
+        &--hidden {
+            display: none;
+        }
     }
 
     &__list {
         &-stub {
             align-self: center;
 
+            height: 100%;
             margin: $sidebar-stub-margin-top 0 10px;
 
             &--small {
