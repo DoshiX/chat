@@ -1,7 +1,7 @@
 <template>
     <div class="messages__wrapper">
-        <div class="messages" v-if="messages.length !== 0">
-            <div v-for="(messagesByDate, index) in formatMessagesByDate" :key="index"
+        <div class="messages" v-if="Object.keys(messages).length !== 0">
+            <div v-for="(messagesByDate, index) in messages" :key="index"
                 class="messages__day-group"
             >
                 <div class="messages__date-sent">{{ messagesByDate.date_string }}</div>
@@ -22,41 +22,11 @@
 import { GetIsOddNumber } from '@/helpers';
 import MessageComponent from '@/components/MessageComponent.vue';
 
-import { computed } from 'vue';
-
 const props = defineProps({
 	messages: {
-		type: Array,
+		type: Object,
 		required: true,
 	},
-});
-
-const getFormatedDate = (dateString) => {
-	const date = new Date(dateString);
-
-	return {
-		full_date: ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear(),
-		day: date.getDate(),
-	};
-}; 
-
-const formatMessagesByDate = computed(() => {
-	const today = getFormatedDate(new Date().toISOString());
-	const formatedMessages = {};
-
-	props.messages.forEach((message)=> {
-		const messageDate = getFormatedDate(message.date);
-		if (!(messageDate.full_date in formatedMessages)) {
-			formatedMessages[messageDate.full_date] = {
-				date_string: messageDate.day === today.day ? 'Сегодня' : `${messageDate.full_date}`,
-				messages: [],
-			};
-		}
-
-		formatedMessages[messageDate.full_date].messages.push(message);
-	});
-
-	return formatedMessages;
 });
 </script>
 

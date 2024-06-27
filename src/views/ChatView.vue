@@ -10,7 +10,7 @@
 
         <div class="chat-page__messages-content">
             <TopBarComponent class="chat-page__top-bar"
-                :user="chatsData[5]"
+                :chat="currentChat"
 				@searchClick="noticeClickHandler"
                 @callClick="noticeClickHandler"
                 @optionsClick="noticeClickHandler"
@@ -20,7 +20,7 @@
                 <div class="chat-page__messages">
                     <div class="chat-page__messages-list">
                         <MessagesListComponent
-                            :messages="chatsData[5].messages"
+                            :messages="currentChat.messages"
                         />
                     </div>
 
@@ -60,101 +60,21 @@ import TopBarComponent from '@/components/TopBarComponent.vue';
 import MessagesListComponent from '@/components/MessagesListComponent.vue';
 import InputComponent from '@/components/InputComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
+import { ref, onMounted, onUnmounted, onBeforeMount } from 'vue';
+import { useChatStore } from '@/stores/store';
+import { storeToRefs } from 'pinia';
 
-import { ref, onMounted } from 'vue';
+const chatStore = useChatStore();
 
-const chatsData = ref([
-	{
-		id: 1,
-		avatar_url: '',
-		name: 'New chat',
-		verified: false,
-		messages: [],
-	},
-	{
-		id: 2,
-		avatar_url: 'avatar-7.jpg',
-		name: 'New chat',
-		verified: false,
-		messages: [
-			{
-				id: 1,
-				text: 'message',
-				date: '14:00',
-				read: true,
-			},
-		],
-	},
-	{
-		id: 3,
-		avatar_url: 'avatar-1.jpg',
-		name: 'Чат 2',
-		verified: false,
-		messages: [
-			{
-				id: 1,
-				text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-				date: '18:28',
-			},
-			{
-				id: 2,
-				text: 'Ок, увидимся',
-				date: '18:30',
-			},
-		],
-	},
-	{
-		id: 4,
-		avatar_url: 'avatar-5.jpg',
-		name: 'New chat',
-		verified: false,
-		messages: [
-			{
-				id: 1,
-				text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-				date: '20:30',
-			},
-		],
-	},
-	{
-		id: 5,
-		avatar_url: '',
-		name: 'Satoru Gojo',
-		verified: true,
-		messages: [
-			{
-				id: 1,
-				text: 'Прибыл',
-				date: '20:31',
-				read: true,
-			},
-		],
-	},
-	{
-		id: 6,
-		avatar_url: 'avatar-2.png',
-		name: 'David Moore',
-		verified: true,
-		online_status: 'в сети 5 мин назад',
-		messages: [
-			{
-				id: 1,
-				text: 'Тестовое сообщение😐',
-				date: '2024-06-26T11:30:38.538Z',
-			},
-			{
-				id: 2,
-				text: 'Привет, все работает',
-				date: '2024-06-26T11:31:38.538Z',
-			},
-			{
-				id: 3,
-				text: 'Ну все, можно расходиться 😄',
-				date: '2024-06-26T11:32:38.538Z',
-			},
-		],
-	},
-]);
+const { getChats: chatsData, getCurrentSelectedChat: currentChat} = storeToRefs(chatStore);
+
+const windowResizeCallBack = (event) => {
+	const width = document.body.clientWidth;
+
+	if (width <= 768) 
+		sidebarIsFullSize.value = false;
+		
+};
 
 const buttonHandler = () => {
 	console.log('Клик');
@@ -171,22 +91,23 @@ let sidebarIsFullSize = ref(false);
 
 const sideBarClickHandler = () => {
 	const width = document.body.clientWidth;
-	if (width <= 768) {
+	if (width <= 768) 
 		sidebarIsFullSize.value = false;
-	} else {
+	else 
 		sidebarIsFullSize.value = !sidebarIsFullSize.value;
-	}
 };
+
+onBeforeMount(()=> {
+	chatStore.selectDefaultCurrentChat();
+});
 
 onMounted(() => {
 	document.body.style.overflow = 'hidden';
-	window.addEventListener('resize', (e) => {
-		const width = document.body.clientWidth;
+	window.addEventListener('resize', windowResizeCallBack);
+});
 
-		if (width <= 768) {
-			sidebarIsFullSize.value = false;
-		}
-	});
+onUnmounted(()=> {
+	window.removeEventListener('resize', windowResizeCallBack, false);
 });
 
 </script>

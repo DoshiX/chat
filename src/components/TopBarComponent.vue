@@ -4,15 +4,15 @@
             <div class="top-bar__user">
                 <AvatarComponent
                     size="small"
-                    :stubText="GetFirstLetterString(user.name)"
-                    :photoName="user.avatar_url"
+                    :stubText="GetFirstLetterString(chat.name)"
+                    :photoName="chat.avatar_url"
                 />
 
                 <div class="top-bar__user-info">
                     <div class="top-bar__user-name">
-                        <span class="top-bar__user-name-text">{{ user.name }}</span>
+                        <span class="top-bar__user-name-text">{{ chat.name }}</span>
                         <icon-base
-                            v-if="user.verified"
+                            v-if="chat.verified"
                             class="top-bar__user-icon"
                             icon-name="verified"
                             icon-color="#1a9cff"
@@ -20,7 +20,7 @@
                             height="18"
                         />
                     </div>
-                    <span class="top-bar__user-status">{{ user.online_status }}</span>
+                    <span class="top-bar__user-status">{{ chat.status }}</span>
                 </div>
             </div>
 
@@ -57,7 +57,7 @@ import IconBase from '@/components/IconBase.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
 
 const props = defineProps ({
-	user: {
+	chat: {
 		type: Object,
 		required: true,
 	},

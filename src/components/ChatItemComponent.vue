@@ -3,7 +3,7 @@
         <div class="chat"
             :id="chat.id"
             :class="[{
-                        'chat--active': chat.isActive,
+                        'chat--active': chat.is_active,
                         'chat--small': !isFullSize
                     }]"
         >
@@ -27,13 +27,13 @@
                         />
                     </div>
 
-                    <span class="chat__date" v-if="chat.lastMessage">{{ chat.lastMessage.date }}</span>
+                    <span class="chat__date" v-if="chat.last_message">{{ chat.last_message.sent_time }}</span>
                 </div>
 
-                <div class="chat__message" v-if="chat.lastMessage">
-                    <span class="chat__message-text">{{ chat.lastMessage.text }}</span>
+                <div class="chat__message" v-if="chat.last_message">
+                    <span class="chat__message-text">{{ chat.last_message.text }}</span>
                 
-                    <span class="chat__message-count" v-if="chat.unreadMessagesCount !== 0">{{ chat.unreadMessagesCount }}</span>
+                    <span class="chat__message-count" v-if="chat.unread_messages_count !== 0">{{ chat.unread_messages_count }}</span>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@ import { GetFirstLetterString } from '@/helpers';
 import AvatarComponent from '@/components/AvatarComponent.vue';
 import IconBase from '@/components/IconBase.vue';
 
-const props = defineProps ({
+defineProps ({
 	chat: {
 		type: Object,
 		required: true,
@@ -55,6 +55,7 @@ const props = defineProps ({
 		default: true,
 	},
 });
+
 </script>
 
 <style scoped lang="scss">

@@ -4,7 +4,7 @@
             <span class="message__text">{{ message.text }}</span>
             
             <div :class="[theme === 'green' ? 'message__info--white' : '', 'message__info']">
-                <span class="message__time">{{ getMessageTime(message.date) }}</span>
+                <span class="message__time">{{ message.sent_time }}</span>
                 <icon-base
                     icon-name="check"
                     width="14" 
@@ -30,9 +30,6 @@ defineProps ({
 	},
 });
 
-const getMessageTime = (date) => {
-	return `${new Date(date).getHours()}:${new Date(date).getMinutes()}`;
-};
 </script>
 
 <style scoped lang="scss">

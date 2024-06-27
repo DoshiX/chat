@@ -127,7 +127,7 @@
                     <h3 class="gui-page__component-title">Чат</h3>
                     <div class="gui-page__component-chat" v-for="chat in chatsData" :key="chat.id">
                         <ChatItemComponent
-                            :chat="formatChat(chat)"
+                            :chat="chat"
                         />
                     </div>
                 </div>
@@ -141,11 +141,11 @@
                     </div>
                 </div>
 
-                <div class="gui-page__component-item">
+                <div class="gui-page__component-item" v-if="currentChat">
                     <h3 class="gui-page__component-title">Top bar</h3>
                     <div class="gui-page__component-top-bar">
                         <TopBarComponent
-                            :user="chatsData[5]"
+                            :chat="currentChat"
                             @searchClick="searchClickHandler"
                             @callClick="callClickHandler"
                             @optionsClick="optionsClickHandler"
@@ -153,24 +153,24 @@
                     </div>
                 </div>
 
-                <div class="gui-page__component-item">
+                <div class="gui-page__component-item" v-if="currentChat && '27.06.2024' in currentChat.messages">
                     <h3 class="gui-page__component-title">Message</h3>
                     <div class="gui-page__component-message">
                         <MessageComponent
-                            :message="chatsData[5].messages[0]"
+                            :message="currentChat.messages['27.06.2024'].messages[0]"
                         />
                         <MessageComponent
-                            :message="chatsData[5].messages[0]"
+                            :message="currentChat.messages['27.06.2024'].messages[0]"
                             theme="white"
                         />
                     </div>
                 </div>
 
-                <div class="gui-page__component-item">
+                <div class="gui-page__component-item" v-if="currentChat">
                     <h3 class="gui-page__component-title">Messages List</h3>
                     <div class="gui-page__component-message-list">
                         <MessagesListComponent
-                            :messages="chatsData[5].messages"
+                            :messages="currentChat.messages"
                         />
                     </div>
                 </div>
@@ -200,122 +200,17 @@ import TopBarComponent from '@/components/TopBarComponent.vue';
 import MessageComponent from '@/components/MessageComponent.vue';
 import MessagesListComponent from '@/components/MessagesListComponent.vue';
 import ChatSidebarComponent from '@/components/ChatSidebarComponent.vue';
+import { useChatStore } from '@/stores/store';
+import { storeToRefs } from 'pinia';
+
+const chatStore = useChatStore();
+
+const { getChats: chatsData, getCurrentSelectedChat: currentChat} = storeToRefs(chatStore);
 
 import { ref } from 'vue';
 
 const msg = ref('Hello World!');
 const searchSidebar = ref('');
-
-const formatChat = (chat) => {
-	const lastMessage = chat.messages.at(-1);
-
-	const unReadMessagesCount = chat.messages.filter((message)=> !message.read).length;
-    
-	const formatedChat = {
-		id: chat.id,
-		...(chat.avatar_url) && { avatar_url: chat.avatar_url },
-		...(chat.name) && { name: chat.name },
-		verified: chat.verified,
-		unreadMessagesCount: unReadMessagesCount,
-	};
-
-	if (lastMessage) { formatedChat.lastMessage = lastMessage; }
-
-	return formatedChat;
-};
-
-const chatsData = ref([
-	{
-		id: 1,
-		avatar_url: '',
-		name: 'New chat',
-		verified: false,
-		messages: [],
-	},
-	{
-		id: 2,
-		avatar_url: 'avatar-7.jpg',
-		name: 'New chat',
-		verified: false,
-		messages: [
-			{
-				id: 1,
-				text: 'message',
-				date: '14:00',
-				read: true,
-			},
-		],
-	},
-	{
-		id: 3,
-		avatar_url: 'avatar-1.jpg',
-		name: 'Чат 2',
-		verified: false,
-		messages: [
-			{
-				id: 1,
-				text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-				date: '18:28',
-			},
-			{
-				id: 2,
-				text: 'Ок, увидимся',
-				date: '18:30',
-			},
-		],
-	},
-	{
-		id: 4,
-		avatar_url: 'avatar-5.jpg',
-		name: 'New chat',
-		verified: false,
-		messages: [
-			{
-				id: 1,
-				text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-				date: '20:30',
-			},
-		],
-	},
-	{
-		id: 5,
-		avatar_url: '',
-		name: 'Satoru Gojo',
-		verified: true,
-		messages: [
-			{
-				id: 1,
-				text: 'Прибыл',
-				date: '20:31',
-				read: true,
-			},
-		],
-	},
-	{
-		id: 6,
-		avatar_url: 'avatar-2.png',
-		name: 'David Moore',
-		verified: true,
-		online_status: 'в сети 5 мин назад',
-		messages: [
-			{
-				id: 1,
-				text: 'Тестовое сообщение😐',
-				date: '2024-06-24T11:30:38.538Z',
-			},
-			{
-				id: 2,
-				text: 'Привет, все работает',
-				date: '2024-06-24T11:31:38.538Z',
-			},
-			{
-				id: 3,
-				text: 'Ну все, можно расходиться 😄',
-				date: '2024-06-24T11:32:38.538Z',
-			},
-		],
-	},
-]);
 
 const searchClickHandler = () => {
 	console.log('Клик по поиску');
