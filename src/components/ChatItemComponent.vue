@@ -2,10 +2,10 @@
     <div class="chat-wrapper">
         <div class="chat"
             :id="chat.id"
-            :class="[{
-                        'chat--active': chat.is_active,
-                        'chat--small': !isFullSize
-                    }]"
+            :class="[
+                        {'chat--active': chat.is_active},
+                        animation ? '' : (isFullSize ? '' : 'chat--small')
+                    ]"
         >
             <AvatarComponent
                 class="chat__avatar"
@@ -13,7 +13,7 @@
                 :photoName="chat.avatar_url"
             />
                 
-            <div class="chat__info" v-if="isFullSize">
+            <div :class="[chatItemAnimationState, 'chat__info']">
                 <div class="chat__title">
                     <div class="chat__name">
                         <div class="chat__name-text">{{ chat.name }}</div>
@@ -45,15 +45,38 @@ import { GetFirstLetterString } from '@/helpers';
 import AvatarComponent from '@/components/AvatarComponent.vue';
 import IconBase from '@/components/IconBase.vue';
 
-defineProps ({
+import { computed } from 'vue';
+
+const props = defineProps ({
 	chat: {
 		type: Object,
 		required: true,
 	},
 	isFullSize: {
-		type: Boolean,
+		type: [Boolean, null],
 		default: true,
 	},
+	animation: {
+		type: Boolean,
+		default: false,
+	},
+});
+
+const chatItemAnimationState = computed(()=> {
+	if (props.isFullSize === null) 
+		return 'chat__info--hidden';
+    
+	if (props.animation) {
+		if (props.isFullSize) 
+			return 'chat__info--animation-open';
+		if (!props.isFullSize)
+			return 'chat__info--animation-close';
+	} else {
+		if (!props.isFullSize) 
+			return 'chat__info--hidden';
+	}
+
+	return null;
 });
 
 </script>
@@ -93,6 +116,19 @@ defineProps ({
         gap: 4px;
 
         flex-grow: 1;
+
+        &--animation {
+            &-open {
+                animation: open_content-info .5s ease both;
+            }
+            &-close {
+                animation: close_content-info .5s ease both;
+            }
+        }
+
+        &--hidden {
+            display: none;
+        }
     }
 
     &__title {

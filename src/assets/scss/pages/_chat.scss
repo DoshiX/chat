@@ -5,3 +5,22 @@ $chat-page-sidebar-border-color: $iron;
 // Sizes
 $chat-page-sidebar-max-width: 364px;
 $chat-page-messages-max-width: 1440px;
+
+// Animation
+@keyframes sidebar_open {
+    0% {
+        width: 80px;
+    }
+    100% {
+        width: 363px;
+    }
+}
+
+@keyframes sidebar_close {
+    0% {
+        width: 363px;
+    }
+    100% {
+        width: 80px;
+    }
+}

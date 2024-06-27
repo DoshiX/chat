@@ -2,8 +2,11 @@
     <div class="chat-page">
         <div class="chat-page__sidebar">
             <ChatSidebarComponent
-                :chats="chatsData"
+                :class=[chatSideBarAnimationState]
                 :isFullSize="sidebarIsFullSize"
+                animation
+                :chats="chatsData"
+                :isDisabledOpenSideBar="isDisabledOpenSideBar"
                 @sideBarClick="sideBarClickHandler"
                 @chatSelect="chatSelectHandler"
             />
@@ -64,17 +67,33 @@ import TopBarComponent from '@/components/TopBarComponent.vue';
 import MessagesListComponent from '@/components/MessagesListComponent.vue';
 import InputComponent from '@/components/InputComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
-import { ref, onMounted, onUnmounted, onBeforeMount, onUpdated } from 'vue';
+import { ref, computed, onMounted, onUnmounted, onBeforeMount, onUpdated } from 'vue';
 import { useChatStore } from '@/stores/store';
 import { storeToRefs } from 'pinia';
 
 const chatStore = useChatStore();
 
+const { getChats: chatsData, getCurrentSelectedChat: currentChat} = storeToRefs(chatStore);
+
 const msg = ref('');
+
+const sidebarIsFullSize = ref(null);
+
+const isDisabledOpenSideBar = ref(false);
 
 const messageListEl = ref(null);
 
-const { getChats: chatsData, getCurrentSelectedChat: currentChat} = storeToRefs(chatStore);
+const chatSideBarAnimationState = computed(()=> {
+	if (sidebarIsFullSize.value === null) 
+		return null;
+
+	return sidebarIsFullSize.value ? 'chat-page__sidebar--animation-open' : 'chat-page__sidebar--animation-close';
+});
+
+const chatSelectHandler = (chat_id) => {
+	chatStore.selectCurrentChat(chat_id);
+	msg.value = '';
+};
 
 onBeforeMount(()=> {
 	chatStore.selectDefaultCurrentChat();
@@ -83,6 +102,9 @@ onBeforeMount(()=> {
 onMounted(() => {
 	window.addEventListener('resize', windowResizeCallBack);
 	messageListEl.value = document.querySelector('.chat-page__messages-list');
+
+	if (checkIsWindowWidthTablet()) isDisabledOpenSideBar.value = true;
+	else isDisabledOpenSideBar.value = false;
 });
 
 onUnmounted(()=> {
@@ -93,16 +115,34 @@ onUpdated(()=> {
 	_scrollToBottom();
 });
 
-const windowResizeCallBack = (event) => {
-	const width = document.body.clientWidth;
-
-	if (width <= 768) 
-		sidebarIsFullSize.value = false;
+const _scrollToBottom = () => {
+	messageListEl.value.scrollTo(0, messageListEl.value.scrollHeight);
 };
 
-const chatSelectHandler = (chat_id) => {
-	chatStore.selectCurrentChat(chat_id);
-	msg.value = '';
+const windowResizeCallBack = () => {
+	if (checkIsWindowWidthTablet()) {
+		isDisabledOpenSideBar.value = true;
+
+		if (typeof sidebarIsFullSize.value === 'boolean')
+			return sidebarIsFullSize.value = false;
+
+		return;
+	}
+	isDisabledOpenSideBar.value = false;
+};
+
+const checkIsWindowWidthTablet = () => {    
+	return document.body.clientWidth <= 768;
+};
+
+const sideBarClickHandler = () => {
+	if (checkIsWindowWidthTablet()) {
+		if (typeof sidebarIsFullSize.value === 'boolean')
+			return sidebarIsFullSize.value = false;
+
+		return;
+	}
+	sidebarIsFullSize.value = !sidebarIsFullSize.value;
 };
 
 const inputFocusHandler = (isFocused) => {
@@ -126,10 +166,6 @@ const sendMessageHandler = () => {
 	msg.value = '';
 };
 
-const _scrollToBottom = () => {
-	messageListEl.value.scrollTo(0, messageListEl.value.scrollHeight);
-};
-
 const noticeClickHandler = () => {
 	alert('Данная опция еще не реализована :)');
 };
@@ -137,20 +173,9 @@ const emojiClickHandler = () => {
 	alert('Тут могли быть смайлики');
 };
 
-let sidebarIsFullSize = ref(false);
-
-const sideBarClickHandler = () => {
-	const width = document.body.clientWidth;
-	if (width <= 768) 
-		sidebarIsFullSize.value = false;
-	else 
-		sidebarIsFullSize.value = !sidebarIsFullSize.value;
-};
-
 </script>
 
 <style scoped lang="scss">
-
 .chat-page {
     display: flex;
 
@@ -161,12 +186,21 @@ const sideBarClickHandler = () => {
     background-color: $chat-page-background-color;
 
     &__sidebar {
-        width: fit-content;
         max-width: $chat-page-sidebar-max-width;
 
         border-right: 1px solid $chat-page-sidebar-border-color;
 
         height: 100%;
+
+        &--animation {
+            &-open {
+                animation: sidebar_open .3s ease both;
+            }
+
+            &-close {
+                animation: sidebar_close .3s ease both;
+            }
+        }
     }
 
     &__messages {

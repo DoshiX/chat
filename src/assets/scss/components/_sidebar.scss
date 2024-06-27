@@ -6,3 +6,29 @@ $sidebar-height: 56px;
 $sidebar-width: 24px;
 $sidebar-width-small-size: 80px;
 $sidebar-stub-margin-top: 8px + $sidebar-height;
+
+// Z-indexes
+$sidebar-control-panel-z-index: 10;
+
+// Animation
+@keyframes open_sidebar-search {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes close_sidebar-search {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
