@@ -23,6 +23,8 @@
                     ]"
             :placeholder="placeholder"
             :disabled="disabled"
+            @focus="$emit('focus_changed', true)"
+            @blur="$emit('focus_changed', false)"
         >
 
     </div>
@@ -62,6 +64,7 @@ const props = defineProps({
 });
 
 const model = defineModel();
+defineEmits(['focus_changed']);
 
 const inputModifiersClass = {
 	'input--circle': props.circle,

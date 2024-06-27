@@ -1,6 +1,6 @@
 import getMessageSentTime from '@/helpers/GetMessageSentTime';
 
-const formatMessagesByDate = (messages = []) => {
+const formatMessages = (messages = []) => {
 	const today = _getFormatedDate(new Date().toISOString());
 	const formatedMessages = {};
 
@@ -31,4 +31,4 @@ const _getFormatedDate = (dateString) => {
 	};
 };
 
-export default formatMessagesByDate;
+export default formatMessages;

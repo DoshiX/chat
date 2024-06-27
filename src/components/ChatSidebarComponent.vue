@@ -34,6 +34,7 @@
                 <ChatListComponent 
                     :chats="chats"
                     :isFullSize="isFullSize"
+                    @chatSelect="$emit('chatSelect', $event)"
                 />
             </div>
 
@@ -54,7 +55,7 @@ import ChatListComponent from '@/components/ChatListComponent.vue';
 
 const model = defineModel();
 
-const props = defineProps({
+defineProps({
 	chats: {
 		type: Array,
 		required: true,
@@ -65,7 +66,7 @@ const props = defineProps({
 	},
 });
 
-defineEmits(['sideBarClick']);
+defineEmits(['sideBarClick', 'chatSelect']);
 </script>
 
 <style scoped lang="scss">

@@ -4,7 +4,7 @@
             <ChatItemComponent
                 :chat="chat"
 				:isFullSize="isFullSize"
-                @click="selectedChatElement(chat)"
+                @click="$emit('chatSelect', chat.id)"
             />
         </div>
     </div>
@@ -12,10 +12,6 @@
 
 <script setup>
 import ChatItemComponent from '@/components/ChatItemComponent.vue';
-
-import { useChatStore } from '@/stores/store';
-
-const chatStore = useChatStore();
 
 defineProps({
 	chats: {
@@ -28,9 +24,6 @@ defineProps({
 	},
 });
 
-const selectedChatElement = (chat) => {
-	chatStore.selectCurrentChat(chat.id);
-};
 </script>
 
 <style scoped lang="scss">

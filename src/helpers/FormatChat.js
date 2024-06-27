@@ -1,5 +1,5 @@
 import GetCurrentStatus from '@/helpers/GetCurrentStatus';
-import FormatMessagesByDate from '@/helpers/FormatMessages';
+import FormatMessages from '@/helpers/FormatMessages';
 import getMessageSentTime from '@/helpers/GetMessageSentTime';
 
 const formatChat = (chat) => {
@@ -15,7 +15,7 @@ const formatChat = (chat) => {
 		...(chat.is_active) && { is_active: chat.is_active },
 		unread_messages_count: unReadMessagesCount,
 		status: GetCurrentStatus({status: chat.status, last_seen_date: chat.last_seen_date}),
-		messages: FormatMessagesByDate(chat.messages),
+		messages: FormatMessages(chat.messages),
 	};
 
 	if (lastMessage) 

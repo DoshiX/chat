@@ -149,7 +149,7 @@ export const useChatStore = defineStore({
 				],
 			},
 		],
-		current_chat: null,
+		current_chat_index: null,
 	}),
 
 	getters: {
@@ -162,14 +162,14 @@ export const useChatStore = defineStore({
 		},
 
 		getCurrentSelectedChat: (state) => {
-			return state.current_chat;
+			return state.getChats[state.current_chat_index];
 		},
 	},
 	
 	actions: {
 		selectCurrentChat(chat_id) {
-			if (this.current_chat) {
-				const previousSelectedChat = this.chats.find((chat) => this.current_chat.id === chat.id);
+			if (this.current_chat_index !== null) {
+				const previousSelectedChat = this.chats[this.current_chat_index];
 				delete previousSelectedChat.is_active;
 			}
 			
@@ -177,11 +177,36 @@ export const useChatStore = defineStore({
 
 			this.chats[selectedChatIndex].is_active = true;
 
-			this.current_chat = this.getChats[selectedChatIndex];
+			this.current_chat_index = selectedChatIndex;
+
+			this.readMessages();
 		},
 
 		selectDefaultCurrentChat() {
 			this.selectCurrentChat(this.chats[0].id);
+		},
+
+		sendMessage(text) {
+			const { messages } = this.chats[this.current_chat_index];
+
+			const messagePayload = {
+				id: messages.length ? messages[messages.length - 1].id + 1 : 0,
+				text: text,
+				sent_date: new Date(),
+				read: true,
+			};
+
+			messages.push(messagePayload);
+		},
+
+		readMessages() {
+			const { messages } = this.chats[this.current_chat_index];
+			
+			if (messages.length) {
+				messages.forEach((message)=> {
+					message.read = true;
+				}); 
+			}
 		},
 	},
 });
