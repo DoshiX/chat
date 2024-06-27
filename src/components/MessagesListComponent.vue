@@ -32,6 +32,10 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .messages {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    
     padding: 0 24px;
 
     background-color: $messages-list-background-color;
@@ -67,7 +71,9 @@ const props = defineProps({
         display: flex;
         align-items: center;
         justify-content: center;
+        
         height: 100%;
+        padding: 0 24px;
 
         color: $messages-list-stub-color;
     }

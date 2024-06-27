@@ -64,6 +64,11 @@ defineProps ({
         }
     }
 
+    &__text {
+        overflow-wrap: break-word;
+        word-break: break-all;
+    }
+
     &__time {
         font-size: $message-time-font-size;
         line-height: $message-time-line-height;

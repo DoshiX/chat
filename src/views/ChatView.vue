@@ -5,6 +5,7 @@
                 :chats="chatsData"
                 :isFullSize="sidebarIsFullSize"
                 @sideBarClick="sideBarClickHandler"
+                @chatSelect="chatSelectHandler"
             />
         </div>
 
@@ -26,9 +27,11 @@
 
                     <div class="chat-page__input-bar">
                         <InputComponent 
+							v-model.trim="msg"
                             placeholder="Напишите сообщение"
                             prefixElement
                             suffixElement
+							@focus_changed="inputFocusHandler"
                         >
                             <template #prefixElement>
                                 <ButtonComponent
@@ -43,7 +46,8 @@
                                 <ButtonComponent
                                     prefixIcon
                                     iconName="send"
-                                    @buttonClick="buttonHandler"
+                                    @buttonClick="sendMessageHandler"
+                                    :disabled="!msg.length"
                                 />
                             </template>
                         </InputComponent>
@@ -60,24 +64,70 @@ import TopBarComponent from '@/components/TopBarComponent.vue';
 import MessagesListComponent from '@/components/MessagesListComponent.vue';
 import InputComponent from '@/components/InputComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
-import { ref, onMounted, onUnmounted, onBeforeMount } from 'vue';
+import { ref, onMounted, onUnmounted, onBeforeMount, onUpdated } from 'vue';
 import { useChatStore } from '@/stores/store';
 import { storeToRefs } from 'pinia';
 
 const chatStore = useChatStore();
 
+const msg = ref('');
+
+const messageListEl = ref(null);
+
 const { getChats: chatsData, getCurrentSelectedChat: currentChat} = storeToRefs(chatStore);
+
+onBeforeMount(()=> {
+	chatStore.selectDefaultCurrentChat();
+});
+
+onMounted(() => {
+	window.addEventListener('resize', windowResizeCallBack);
+	messageListEl.value = document.querySelector('.chat-page__messages-list');
+});
+
+onUnmounted(()=> {
+	window.removeEventListener('resize', windowResizeCallBack);
+});
+
+onUpdated(()=> {
+	_scrollToBottom();
+});
 
 const windowResizeCallBack = (event) => {
 	const width = document.body.clientWidth;
 
 	if (width <= 768) 
 		sidebarIsFullSize.value = false;
-		
 };
 
-const buttonHandler = () => {
-	console.log('Клик');
+const chatSelectHandler = (chat_id) => {
+	chatStore.selectCurrentChat(chat_id);
+	msg.value = '';
+};
+
+const inputFocusHandler = (isFocused) => {
+	if (isFocused) 
+		window.addEventListener('keypress', _keypressListener);
+	else 
+		window.removeEventListener('keypress', _keypressListener);
+	
+};
+
+const _keypressListener = (e) => {
+	if (e.key === 'Enter') 
+		sendMessageHandler();
+};
+
+const sendMessageHandler = () => {
+	if (!msg.value.length) 
+		return;
+
+	chatStore.sendMessage(msg.value);
+	msg.value = '';
+};
+
+const _scrollToBottom = () => {
+	messageListEl.value.scrollTo(0, messageListEl.value.scrollHeight);
 };
 
 const noticeClickHandler = () => {
@@ -97,25 +147,14 @@ const sideBarClickHandler = () => {
 		sidebarIsFullSize.value = !sidebarIsFullSize.value;
 };
 
-onBeforeMount(()=> {
-	chatStore.selectDefaultCurrentChat();
-});
-
-onMounted(() => {
-	document.body.style.overflow = 'hidden';
-	window.addEventListener('resize', windowResizeCallBack);
-});
-
-onUnmounted(()=> {
-	window.removeEventListener('resize', windowResizeCallBack, false);
-});
-
 </script>
 
 <style scoped lang="scss">
 
 .chat-page {
     display: flex;
+
+    overflow: hidden;
 	
     height: 100%;
 
