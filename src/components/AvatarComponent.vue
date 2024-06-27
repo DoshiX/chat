@@ -1,9 +1,9 @@
 <template>
     <div :class="[AVATAR_SIZES[size], 'avatar']">
-        <div class="avatar__photo" v-if="isImageLoaded">
+        <div class="avatar__photo" v-if="isImageLoaded && isPhotoExists">
             <img
                 class="avatar__photo--img"
-                :src="requireImage()"
+                :src="imgSrc"
                 @error="imgHandler"
                 @load="imgHandler"
             >
@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onBeforeUpdate, onBeforeMount } from 'vue';
 import { AVATAR_SIZES } from '@/constants';
 
 const props = defineProps({
@@ -32,17 +32,39 @@ const props = defineProps({
 	},
 });
 
+const imgSrc = ref(null);
+
+onBeforeUpdate(()=> {
+	imgSrc.value = requireImage();
+});
+
+onBeforeMount(()=> {
+	imgSrc.value = requireImage();
+});
+
 const requireImage = () => {
-	return new URL(`../assets/images/${props.photoName}`, import.meta.url).href;
+	if (props.photoName) {
+		isPhotoExists.value = true;
+
+		const photoUrl = new URL(`../assets/images/${props.photoName}`, import.meta.url).href;
+		isImageLoaded.value = true;
+
+		return photoUrl;
+	}
+
+	isPhotoExists.value = false;
+
+	return null;
 };
 
-const isImageLoaded = ref(true);
+const isImageLoaded = ref(false);
+const isPhotoExists = ref(false);
 
 const imgHandler = function (event) {
 	const { type } = event;
 
-	if (type === 'error') { isImageLoaded.value = false; }
-	if (type === 'load') { isImageLoaded.value = true; }
+	if (type === 'error') isImageLoaded.value = false; 
+	if (type === 'load') isImageLoaded.value = true; 
 };
 </script>
 
@@ -68,6 +90,7 @@ const imgHandler = function (event) {
             width: inherit;
             height: inherit;
 
+            object-fit: cover;
             border-radius: 50%;
         }
     }

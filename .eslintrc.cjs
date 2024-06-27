@@ -36,6 +36,7 @@ module.exports = {
 		'comma-spacing': ['error', { 'before': false, 'after': true }],
 		'comma-style': ['error', 'last'],
 		'eol-last': ['error', 'always'],
+		'curly': ['error', 'multi-or-nest'],
 		'key-spacing': [
 			'error',
 			{
@@ -61,7 +62,6 @@ module.exports = {
 		}],
 		'keyword-spacing': ['error', { 'before': true }],
 		'require-await': 'off',
-		'curly': 'error',
 		'no-empty': ['error', { 'allowEmptyCatch': true }],
 		'no-prototype-builtins': 0,
 		'padding-line-between-statements': [
