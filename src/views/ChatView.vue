@@ -59,7 +59,8 @@
                 </div>
             </div>
         </div>
-        <div v-else class="chat-page__messages-stub">У вас нет чатов для начала диалога</div>
+        <div v-if="!currentChat && !chatsData.length" class="chat-page__messages-stub">У вас нет чатов для начала диалога</div>
+        <div v-if="!currentChat && chatsData.length" class="chat-page__messages-stub">Выберите чат</div>
     </div>
 </template>
 

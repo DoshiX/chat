@@ -174,6 +174,7 @@ const chatItemAnimationState = computed(()=> {
 
             -webkit-line-clamp: 1;
             text-overflow: ellipsis;
+            width: 100%;
 
             color: $chat-message-text-color;
         }
