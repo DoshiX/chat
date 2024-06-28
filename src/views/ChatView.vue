@@ -7,12 +7,13 @@
                 animation
                 :chats="chatsData"
                 :isDisabledOpenSideBar="isDisabledOpenSideBar"
+                v-model="search_string"
                 @sideBarClick="sideBarClickHandler"
                 @chatSelect="chatSelectHandler"
             />
         </div>
 
-        <div class="chat-page__messages-content">
+        <div class="chat-page__messages-content" v-if="currentChat">
             <TopBarComponent class="chat-page__top-bar"
                 :chat="currentChat"
 				@searchClick="noticeClickHandler"
@@ -58,6 +59,7 @@
                 </div>
             </div>
         </div>
+        <div v-else class="chat-page__messages-stub">У вас нет чатов для начала диалога</div>
     </div>
 </template>
 
@@ -73,7 +75,7 @@ import { storeToRefs } from 'pinia';
 
 const chatStore = useChatStore();
 
-const { getChats: chatsData, getCurrentSelectedChat: currentChat} = storeToRefs(chatStore);
+const { getChats: chatsData, getCurrentSelectedChat: currentChat, search_string} = storeToRefs(chatStore);
 
 const msg = ref('');
 
@@ -239,6 +241,15 @@ const emojiClickHandler = () => {
 
             margin: 80px 8px 0;
             padding-top: 16px;
+        }
+
+        &-stub {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+
+            color: $chat-page-messages-background-color;
         }
     }
 

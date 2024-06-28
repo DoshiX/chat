@@ -150,6 +150,7 @@ export const useChatStore = defineStore({
 			},
 		],
 		current_chat_index: null,
+		search_string: '',
 	}),
 
 	getters: {
@@ -157,6 +158,27 @@ export const useChatStore = defineStore({
 			const formatedChats = state.chats.map((chat) => {
 				return FormatChat(chat);
 			});
+
+			if (state.search_string.length >= 3) {
+				const filtedFormatedChats = formatedChats
+					.filter(
+						(entry) => formatedChats.length
+							? Object.keys(formatedChats[0])
+								.some(key => (String(entry[key])).toLowerCase().includes(state.search_string.toLowerCase()))
+							: true
+					);
+
+				if (filtedFormatedChats.length) {
+					state.resetCurrentChat();
+					
+					filtedFormatedChats.forEach((chat)=> {
+						chat.is_active = false;
+					});
+
+					return filtedFormatedChats;
+				}
+				
+			}
 
 			return formatedChats;
 		},
@@ -168,6 +190,8 @@ export const useChatStore = defineStore({
 	
 	actions: {
 		selectCurrentChat(chat_id) {
+			this.search_string = '';
+
 			if (this.current_chat_index !== null) {
 				const previousSelectedChat = this.chats[this.current_chat_index];
 				delete previousSelectedChat.is_active;
@@ -182,8 +206,17 @@ export const useChatStore = defineStore({
 			this.readMessages();
 		},
 
+		resetCurrentChat() {
+			if (this.current_chat_index !== null) {
+				const previousSelectedChat = this.chats[this.current_chat_index];
+				delete previousSelectedChat.is_active;
+			}
+
+			this.current_chat_index = null;
+		},
+
 		selectDefaultCurrentChat() {
-			this.selectCurrentChat(this.chats[0].id);
+			if (this.chats.length) this.selectCurrentChat(this.chats[0].id);
 		},
 
 		sendMessage(text) {
