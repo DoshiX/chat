@@ -4,8 +4,18 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
 
+const guiPage = fileURLToPath(new URL('src/views/GUIView.vue', import.meta.url));
+
 // https://vitejs.dev/config/
 export default defineConfig({
+	build: {
+		rollupOptions: {
+			external: [
+				guiPage,
+			],
+		},
+	},
+	base: '/chat/',
 	plugins: [
 		vue(),
 		vueDevTools(),

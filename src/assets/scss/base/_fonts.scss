@@ -3,7 +3,7 @@
     font-family: $font-family-custom;
     font-weight: $font-weight-regular;
     font-style: normal;
-    src: local("Inter"), url("#{$font-path}/#{$font-name}.ttf") format("truetype");
+    src: local("Inter"), url("@/assets/fonts/Inter-Regular.ttf") format("truetype");
 }
 
 @font-face {
@@ -11,5 +11,5 @@
     font-family: $font-family-custom;
     font-weight: $font-weight-semi-bold;
     font-style: normal;
-    src: local("Inter"), url("#{$font-path}/#{$font-name}.ttf") format("truetype");
+    src: local("Inter"), url("@/assets/fonts/Inter-SemiBold.ttf") format("truetype");
 }
